@@ -8,8 +8,8 @@ import os.path
 import time
 from subprocess import call
 
-adb_cmd = os.path.join(env.sdk_path, "platform-tools", "adb")
-fastboot_cmd = os.path.join(env.sdk_path, "platform-tools", "fastboot")
+adb_cmd = os.path.join(os.path.expanduser(env.sdk_path), "platform-tools", "adb")
+fastboot_cmd = os.path.join(os.path.expanduser(env.sdk_path), "platform-tools", "fastboot")
 
 
 def download_url(source_url, destination_filename):
@@ -28,31 +28,35 @@ def download_url(source_url, destination_filename):
 @task
 def download_sdk():
     "download the Android SDK"
-    download_url(env.sdk_url, os.path.join(env.destination_path, "sdk.tgz"))
-    call(["tar", "-xvzf", os.path.join(env.destination_path, "sdk.tgz"),
-        "-C", env.sdk_path])
+    download_url(env.sdk_url, os.path.join(env.working_path, "download", "sdk.tgz"))
+    call(["tar", "-xvzf", os.path.join(env.working_path, "download", "sdk.tgz"),
+        "-C", os.path.expanduser(env.sdk_path)])
 
 
 @task
 def download_twrp():
     "download TWRP"
-    download_url(env.bootloader_url, os.path.join(env.destination_path, "twrp.img"))
+    download_url(env.bootloader_url, os.path.join(env.working_path, "download", "twrp.img"))
 
 
 @task
 def download_nexus_image():
     "download the stock Nexus image"
-    download_url(env.image_url, os.path.join(env.destination_path, "nexus-image.tgz"))
-    call(["tar", "-xvzf", os.path.join(env.destination_path, "nexus-image.tgz"),
-        "-C", env.destination_path])
+    download_url(env.image_url, os.path.join(env.working_path, "download", "nexus-image.tgz"))
+    call(["tar", "-xvzf", os.path.join(env.working_path, "download", "nexus-image.tgz"),
+        "-C", env.working_path])
+    call(["mv",
+        os.path.join(env.working_path, "{0}-*".format(env.nexus_model)),
+        os.path.join(env.working_path, env.nexus_model, "nexus-image")
+    ])
 
 
 @task
 def download_autoroot():
     "download CF-autoroot"
-    download_url(env.autoroot_url, os.path.join(env.destination_path, "cf-autoroot.zip"))
-    call(["unzip", os.path.join(env.destination_path, "cf-autoroot.zip"),
-        "-d", os.path.join(env.destination_path, "cf-autoroot")])
+    download_url(env.autoroot_url, os.path.join(env.working_path, "download", "cf-autoroot.zip"))
+    call(["unzip", os.path.join(env.working_path, "download", "cf-autoroot.zip"),
+        "-d", os.path.join(env.working_path, env.nexus_model, "cf-autoroot")])
 
 
 @task
@@ -78,13 +82,13 @@ def unlock():
 @task
 def backup():
     "copy backup from phone to local system"
-    call([adb_cmd, "pull", env.remote_backup_path, env.local_backup_path])
+    call([adb_cmd, "pull", env.remote_backup_path, os.path.expanduser(env.local_backup_path)])
 
 
 @task
 def restore():
     "restore backup from local system to phone"
-    call([adb_cmd, "push", env.local_backup_path, env.remote_backup_path])
+    call([adb_cmd, "push", os.path.expanduser(env.local_backup_path), env.remote_backup_path])
 
 
 @task
@@ -93,8 +97,8 @@ def flash_bootloader():
     call([
         fastboot_cmd, "flash", "bootloader",
         os.path.join(
-            env.destination_path,
-            env.image_base,
+            env.working_path, env.nexus_model,
+            "nexus-image",
             "bootloader-*.img")
     ])
     bootloader()
@@ -107,8 +111,8 @@ def flash_radio():
     call([
         fastboot_cmd, "flash", "radio",
         os.path.join(
-            env.destination_path,
-            env.image_base,
+            env.working_path, env.nexus_model,
+            "nexus-image",
             "radio-*.img")
     ])
     bootloader()
@@ -121,8 +125,8 @@ def flash_image():
     call([
         fastboot_cmd, "-w", "update",
         os.path.join(
-            env.destination_path,
-            env.image_base,
+            env.working_path, env.nexus_model,
+            "nexus-image",
             "image-*.zip")
     ])
 
@@ -135,7 +139,7 @@ def flash_autoroot():
     call([
         fastboot_cmd, "-w", "update",
         os.path.join(
-            env.destination_path,
+            env.working_path, env.nexus_model,
             "cf-autoroot",
             "image",
             "CF-*.img")
