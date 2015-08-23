@@ -24,6 +24,8 @@ setup(version=version,
     dependency_links=[
     ],
     install_requires=[
+        "requests",
+        "Fabric",
     ],
     license='MIT',
     zip_safe=False,
