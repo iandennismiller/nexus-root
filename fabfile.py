@@ -1,30 +1,22 @@
 # -*- coding: utf-8 -*-
 # nexus5-root (c) Ian Dennis Miller
 
-from fabric.api import task
+from fabric.api import task, env
 import shutil
 import requests
 import os.path
 from subprocess import call
 
-platform_tools = "/Users/idm/Library/Code/android-sdk-macosx/platform-tools"
-adb_cmd = os.path.join(platform_tools, "adb")
-fastboot_cmd = os.path.join(platform_tools, "fastboot")
-
-# https://developers.google.com/android/nexus/images
-base_url = "https://dl.google.com/dl/android/aosp"
-destination_path = "/tmp"
-
-image_filename = "hammerhead-lmy48i-factory-a38c3441.tgz"  # 5.1.1-rev2
-image_base = "hammerhead-lmy48i"
+adb_cmd = os.path.join(env.platform_tools, "adb")
+fastboot_cmd = os.path.join(env.platform_tools, "fastboot")
 
 
 @task
 def download():
     "download image"
 
-    destination_filename = "{0}/{1}".format(destination_path, image_filename)
-    source_url = "{0}/{1}".format(base_url, image_filename)
+    destination_filename = "{0}/{1}".format(env.destination_path, env.image_filename)
+    source_url = "{0}/{1}".format(env.base_url, env.image_filename)
 
     if not os.path.isfile(destination_filename):
         print("downloading {0}...".format(source_url))
@@ -40,8 +32,8 @@ def download():
 
 @task
 def extract():
-    destination_filename = "{0}/{1}".format(destination_path, image_filename)
-    call(["tar", "-xvzf", destination_filename, "-C", destination_path])
+    destination_filename = "{0}/{1}".format(env.destination_path, env.image_filename)
+    call(["tar", "-xvzf", destination_filename, "-C", env.destination_path])
 
 
 @task
@@ -61,8 +53,8 @@ def flash():
         "flash",
         "bootloader",
         os.path.join(
-            destination_path,
-            image_base,
+            env.destination_path,
+            env.image_base,
             "bootloader-*.img")
     ])
 
