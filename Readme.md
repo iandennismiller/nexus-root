@@ -15,6 +15,8 @@ Find the image download link here: https://developers.google.com/android/nexus/i
 
 ### install requirements (Android SDK)
 
+If the Android SDK is not already installed, then install it here.
+
     make requirements
 
 ### download the images
@@ -35,13 +37,22 @@ This step will wipe all user data, so ensure you have a backup first.
 
 ### flash the new rom
 
+This will install a new bootloader image, radio image, and a new system image.
+
     make flash
 
-## enable developer mode
+After this step is completed, enable developer mode so that further USB debugging is possible.
 
 - get into your phone's settings menu
 - in "About Phone" locate Build Number at bottom of screen
 - Tap "Build Number" 5 times
 - Developer Options:
-    - check "Enable OEM" box
     - check "USB Debugging" box
+
+### custom recovery and root
+
+Now, boot into the custom recovery.
+
+    make root
+
+Select "reboot" and then "system".  When you are prompted to install SuperSU, choose "yes" to install it.
