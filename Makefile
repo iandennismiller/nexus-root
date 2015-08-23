@@ -12,26 +12,26 @@ clean:
 	-rm `find . -name "*.pyc"`
 
 download:
-	fab -c $CONFIG download_nexus_image
-	fab -c $CONFIG download_twrp
-	fab -c $CONFIG download_autoroot
+	fab -c $(CONFIG) download_nexus_image
+	fab -c $(CONFIG) download_twrp
+	fab -c $(CONFIG) download_autoroot
 
 requirements:
-	fab -c $CONFIG download_sdk
+	fab -c $(CONFIG) download_sdk
 
 unlock:
-	fab -c $CONFIG unlock
+	fab -c $(CONFIG) unlock
 
 backup:
-	fab -c $CONFIG backup
+	fab -c $(CONFIG) backup
 
 restore:
-	fab -c $CONFIG restore
+	fab -c $(CONFIG) restore
 
 flash:
-	fab -c $CONFIG flash_bootloader
-	fab -c $CONFIG flash_radio
-	fab -c $CONFIG flash_image
-	fab -c $CONFIG flash_autoroot
+	fab -c $(CONFIG) flash_bootloader
+	fab -c $(CONFIG) flash_radio
+	fab -c $(CONFIG) flash_image
+	fab -c $(CONFIG) flash_autoroot
 
 .PHONY: clean install download sdk bootloader unlock backup restore flash

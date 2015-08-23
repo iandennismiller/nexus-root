@@ -78,13 +78,13 @@ def unlock():
 @task
 def backup():
     "copy backup from phone to local system"
-    call([adb_cmd, "reboot", "pull", env.remote_backup_path, env.local_backup_path])
+    call([adb_cmd, "pull", env.remote_backup_path, env.local_backup_path])
 
 
 @task
 def restore():
     "restore backup from local system to phone"
-    call([adb_cmd, "reboot", "push", env.local_backup_path, env.remote_backup_path])
+    call([adb_cmd, "push", env.local_backup_path, env.remote_backup_path])
 
 
 @task
