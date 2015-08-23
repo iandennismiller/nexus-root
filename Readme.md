@@ -1,10 +1,13 @@
-# nexus5-root
+# nexus-root
 
-Root your nexus 5.  This installs a specific version of the nexus5 roms.
+Root your nexus.  This installs a specific version of the nexus roms.  Currently supported out of the box are:
+
+- Nexus 5 (nexus5.conf)
+- Nexus 6 (nexus6.conf)
 
 ## quickstart
 
-If you are starting with a stock phone and you've already backed up the sdcard, then just jump right in.
+If you are starting with a stock phone and you've already backed up the sdcard, then just jump right in.  First, edit the Makefile to use the correct configuration file for your device.
 
     make download unlock flash root
 
