@@ -2,6 +2,20 @@
 
 Root your nexus 5.  This installs a specific version of the nexus5 roms.
 
+## quickstart
+
+If you are starting with a stock phone and you've already backed up the sdcard, then just jump right in.
+
+    make download unlock flash root
+
+This will do the following:
+
+- download a system image
+- download a custom recovery (TWRP)
+- unlock the bootloader (and wipe the sdcard)
+- flash the system image
+- flash the custom recovery (which roots the device)
+
 ## verify the configuration
 
 Everything is controlled by nexus5.conf, which points to:
@@ -11,7 +25,9 @@ Everything is controlled by nexus5.conf, which points to:
 
 Find the image download link here: https://developers.google.com/android/nexus/images
 
-## commands
+In order to target a different phone, update the configuration accordingly.
+
+## command details
 
 ### install requirements (Android SDK)
 
