@@ -27,7 +27,7 @@ def download_url(source_url, destination_filename):
 
 @task
 def download_sdk():
-    "download sdk"
+    "download the Android SDK"
     download_url(env.sdk_url, os.path.join(env.destination_path, "sdk.tgz"))
     call(["tar", "-xvzf", os.path.join(env.destination_path, "sdk.tgz"),
         "-C", env.sdk_path])
@@ -41,7 +41,7 @@ def download_twrp():
 
 @task
 def download_nexus_image():
-    "download image"
+    "download the stock Nexus image"
     download_url(env.image_url, os.path.join(env.destination_path, "nexus-image.tgz"))
     call(["tar", "-xvzf", os.path.join(env.destination_path, "nexus-image.tgz"),
         "-C", env.destination_path])
@@ -49,7 +49,7 @@ def download_nexus_image():
 
 @task
 def download_autoroot():
-    "download autoroot"
+    "download CF-autoroot"
     download_url(env.autoroot_url, os.path.join(env.destination_path, "cf-autoroot.zip"))
     call(["unzip", os.path.join(env.destination_path, "cf-autoroot.zip"),
         "-d", os.path.join(env.destination_path, "cf-autoroot")])
@@ -57,28 +57,39 @@ def download_autoroot():
 
 @task
 def bootloader():
+    "reboot the phone into the bootloader"
     call([fastboot_cmd, "reboot-bootloader"])
 
 
 @task
-def unlock():
-    call([fastboot_cmd, "oem", "unlock"])
-    raw_input('Press ENTER after you have unlocked the bootloader.')
+def reboot():
+    "reboot the phone"
     call([fastboot_cmd, "reboot"])
 
 
 @task
+def unlock():
+    "unlock the phone's bootloader.  NB: This step will wipe all user data."
+    call([fastboot_cmd, "oem", "unlock"])
+    raw_input('Press ENTER after you have unlocked the bootloader.')
+    reboot()
+
+
+@task
 def backup():
+    "copy backup from phone to local system"
     call([adb_cmd, "reboot", "pull", env.remote_backup_path, env.local_backup_path])
 
 
 @task
 def restore():
+    "restore backup from local system to phone"
     call([adb_cmd, "reboot", "push", env.local_backup_path, env.remote_backup_path])
 
 
 @task
 def flash_bootloader():
+    "flash the stock bootloader"
     call([
         fastboot_cmd, "flash", "bootloader",
         os.path.join(
@@ -86,13 +97,13 @@ def flash_bootloader():
             env.image_base,
             "bootloader-*.img")
     ])
-
     bootloader()
     time.sleep(5)
 
 
 @task
 def flash_radio():
+    "flash the radio image"
     call([
         fastboot_cmd, "flash", "radio",
         os.path.join(
@@ -100,13 +111,13 @@ def flash_radio():
             env.image_base,
             "radio-*.img")
     ])
-
     bootloader()
     time.sleep(5)
 
 
 @task
 def flash_image():
+    "flash the nexus image"
     call([
         fastboot_cmd, "-w", "update",
         os.path.join(
@@ -116,7 +127,11 @@ def flash_image():
     ])
 
 
+@task
 def flash_autoroot():
+    "flash CF-auto-root"
+    bootloader()
+    time.sleep(5)
     call([
         fastboot_cmd, "-w", "update",
         os.path.join(

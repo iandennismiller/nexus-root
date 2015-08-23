@@ -2,6 +2,7 @@
 # nexus5-root
 
 SHELL=/bin/bash
+CONFIG=nexus5.conf
 
 install:
 	python setup.py install
@@ -11,26 +12,29 @@ clean:
 	-rm `find . -name "*.pyc"`
 
 download:
-	fab -c nexus5.conf download_nexus_image
-	fab -c nexus5.conf download_twrp
-	fab -c nexus5.conf download_autoroot
+	fab -c $CONFIG download_nexus_image
+	fab -c $CONFIG download_twrp
+	fab -c $CONFIG download_autoroot
 
 sdk:
-	fab -c nexus5.conf download_sdk
+	fab -c $CONFIG download_sdk
 
 bootloader:
-	fab -c nexus5.conf bootloader
+	fab -c $CONFIG bootloader
 
 unlock:
-	fab -c nexus5.conf unlock
-
-flash:
-	fab -c nexus5.conf flash
+	fab -c $CONFIG unlock
 
 backup:
-	fab -c nexus5.conf backup
+	fab -c $CONFIG backup
 
 restore:
-	fab -c nexus5.conf restore
+	fab -c $CONFIG restore
 
-.PHONY: clean install
+flash:
+	fab -c $CONFIG flash_bootloader
+	fab -c $CONFIG flash_radio
+	fab -c $CONFIG flash_image
+	fab -c $CONFIG flash_autoroot
+
+.PHONY: clean install download sdk bootloader unlock backup restore flash
