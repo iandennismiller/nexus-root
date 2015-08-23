@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 # Ian Dennis Miller
-# nexus5-root
+# nexus-root
 
 from setuptools import setup
 
 version = '0.1'
 
 setup(version=version,
-    name='nexus5-root',
-    description="Root your Nexus5.",
+    name='nexus-root',
+    description="Root your Nexus.",
     packages=[
     ],
     scripts=[
-        "bin/nexus5-root.py",
     ],
-    long_description="""Root your Nexus5.""",
+    long_description="""Root your Nexus.""",
     classifiers=[],  # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     include_package_data=True,
     keywords='',
