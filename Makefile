@@ -16,11 +16,8 @@ download:
 	fab -c $CONFIG download_twrp
 	fab -c $CONFIG download_autoroot
 
-sdk:
+requirements:
 	fab -c $CONFIG download_sdk
-
-bootloader:
-	fab -c $CONFIG bootloader
 
 unlock:
 	fab -c $CONFIG unlock

@@ -13,17 +13,25 @@ Find the image download link here: https://developers.google.com/android/nexus/i
 
 ## commands
 
-### download the image
+### install requirements (Android SDK)
+
+    make requirements
+
+### download the images
 
     make download
 
+### back up user data
+
+First, use a program like Titaniam Backup or MyBackup to create a backup of your user data.  Then, run the following command to copy that backup to your laptop.
+
+    make backup
+
 ### unlock the phone
 
+This step will wipe all user data, so ensure you have a backup first.
+
     make unlock
-
-### enter the bootloader
-
-    make bootloader
 
 ### flash the new rom
 
