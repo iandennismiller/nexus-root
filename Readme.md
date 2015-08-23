@@ -11,18 +11,29 @@ Everything is controlled by nexus5.conf, which points to:
 
 Find the image download link here: https://developers.google.com/android/nexus/images
 
-## download the image
+## commands
+
+### download the image
 
     make download
 
-## unlock the phone
+### unlock the phone
 
     make unlock
 
-## enter the bootloader
+### enter the bootloader
 
     make bootloader
 
-## flash the new rom
+### flash the new rom
 
     make flash
+
+## enable developer mode
+
+- get into your phone's settings menu
+- in "About Phone" locate Build Number at bottom of screen
+- Tap "Build Number" 5 times
+- Developer Options:
+    - check "Enable OEM" box
+    - check "USB Debugging" box
