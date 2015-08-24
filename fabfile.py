@@ -26,6 +26,18 @@ def download_url(source_url, destination_filename):
         print("already downloaded as {0}".format(destination_filename))
 
 
+def install_app(apk_filename):
+    "install an app on the phone"
+    call([
+        adb_cmd, "install",
+        os.path.join(
+            env.working_path,
+            "download",
+            apk_filename)
+    ])
+    time.sleep(1)
+
+
 @task
 def ensure_paths():
     download_path = os.path.join(env.working_path, "download")
@@ -36,6 +48,19 @@ def ensure_paths():
 
     if not os.path.isdir(build_path):
         os.mkdir(build_path)
+
+
+def download_apps():
+    download_url("http://file.appsapk.com/wp-content/uploads/downloads/BusyBox.apk",
+        os.path.join(env.working_path, "download", "BusyBox.apk"))
+
+    download_url(
+        "https://drive.google.com/uc?export=download&confirm=no_antivirus&id=0B8muzPZAeiQ6RlFzMWM4ZUZKQ2s",
+        os.path.join(env.working_path, "download", "TitaniumBackup.apk"))
+
+    download_url(
+        "https://drive.google.com/uc?export=download&confirm=no_antivirus&id=0B8muzPZAeiQ6S293d2lqWE1rRlk",
+        os.path.join(env.working_path, "download", "AndroidTerminalEmulator.apk"))
 
 
 @task
@@ -175,3 +200,12 @@ def flash_recovery():
     time.sleep(1)
     fastboot_recovery()
     time.sleep(5)
+
+
+@task
+def install_apps():
+    "install several key APKs: BusyBox and TitaniumBackup"
+
+    install_app("TitaniumBackup.apk")
+    install_app("BusyBox.apk")
+    install_app("AndroidTerminalEmulator.apk")
