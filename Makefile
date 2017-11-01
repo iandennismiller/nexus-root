@@ -2,7 +2,7 @@
 # nexus5-root
 
 SHELL=/bin/bash
-CONFIG=nexus5.conf
+CONFIG=nexus7.conf
 
 install:
 	python setup.py install
